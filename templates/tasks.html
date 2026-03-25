@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задачи — INTOgroup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --accent-color: #7209b7;
+            --sidebar-bg: #2d3748;
+            --light-text: #cbd5e0;
+            --card-bg: #fff;
+            --border: #e5e7eb;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0; top: 0;
+        }
+
+        .logo-container {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-img { width: 40px; margin-right: 12px; }
+        .logo-text { font-size: 20px; font-weight: 700; }
+
+        .nav-menu { padding: 20px 0; flex-grow: 1; }
+        .nav-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: .3s;
+        }
+        .nav-item span { margin-left: 12px; }
+        .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+        .nav-item.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 6px;
+        }
+
+        .user-profile {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center;
+        }
+        .user-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; margin-right: 12px;
+        }
+
+        .content {
+            margin-left: 260px;
+            padding: 25px;
+            width: calc(100% - 260px);
+        }
+
+        .page-title { font-size: 26px; margin-bottom: 20px; }
+
+        .task-card {
+            background: white;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .task-left h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .task-meta {
+            color: #555;
+            font-size: 14px;
+            margin-top: 3px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .task-actions i { cursor: pointer; color: var(--primary-color); }
+
+        .task-details {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .task-details h2 { margin-top: 0; }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .details-label { font-weight: bold; }
+
+        .time-table {
+            width: 100%; border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .time-table th, .time-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+        }
+        .time-table input, .time-table textarea {
+            width: 100%;
+        }
+
+        .add-row-btn {
+            margin-top: 10px;
+            padding: 8px 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .save-time-btn {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 420px;
+            box-shadow: 0 0 15px rgba(0,0,0,.25);
+            z-index: 9999;
+        }
+
+        .modal input, .modal textarea, .modal select {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            padding: 10px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-secondary {
+            padding: 10px 16px;
+            background: #ccc;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<header class="sidebar">
+    <div class="logo-container">
+        <img class="logo-img" src="https://flang.tw1.ru/static/img/logo-header.svg">
+        <span class="logo-text">INTOgroup</span>
+    </div>
+
+    <nav class="nav-menu">
+        <div class="nav-item" data-target="/"> <i class="fa fa-house"></i><span>Рабочий стол</span></div>
+        <div class="nav-item" data-target="/clients"><i class="fa fa-users"></i><span>Клиенты</span></div>
+        <div class="nav-item active" data-target="/tasks"><i class="fa fa-list-check"></i><span>Задачи</span></div>
+        <div class="nav-item" data-target="/widgets"><i class="fa fa-chart-pie"></i><span>Виджеты</span></div>
+        <div class="nav-item" data-target="/chat"><i class="fa fa-comment-dots"></i><span>Чат</span></div>
+        <div class="nav-item" data-target="/bots"><i class="fa fa-robot"></i><span>Мои боты</span></div>
+    </nav>
+
+    <div class="user-profile">
+        <div class="user-avatar">{{ user.name[0].upper() }}</div>
+        <div>
+            <div class="user-name">{{ user.name }}</div>
+            <a href="/logout" class="btn-logout">Выход</a>
+        </div>
+    </div>
+</header>
+
+<div class="content">
+    <h1 class="page-title">Задачи</h1>
+
+    <button class="btn-primary" id="btnCreateTask"><i class="fa fa-plus"></i> Новая задача</button>
+
+    <div id="tasksContainer" style="margin-top:20px;">
+        {% for t in tasks %}
+        <div class="task-card" data-id="{{ t.id }}">
+            <div class="task-left">
+                <h3>{{ t.name }}</h3>
+                <div class="task-meta">Клиент: {{ t.client_name or "Не указан" }}</div>
+                <div class="task-meta">Статус: {{ t.status }}</div>
+            </div>
+            <div class="task-actions">
+                <i class="fa fa-edit edit-task"></i>
+                <i class="fa fa-clock add-time"></i>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="taskDetails"></div>
+</div>
+
+<div class="modal" id="taskModal">
+    <h2 id="modalTitle">Создание задачи</h2>
+
+    <input type="hidden" id="modalTaskId">
+
+    <label>Название</label>
+    <input type="text" id="modalName">
+
+    <label>Описание</label>
+    <textarea id="modalDesc" rows="3"></textarea>
+
+    <label>Клиент</label>
+    <select id="modalClient">
+        {% for c in clients %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Статус</label>
+    <select id="modalStatus">
+        <option>На обсуждении</option>
+        <option>В работе</option>
+        <option>Готов</option>
+    </select>
+
+    <label>Дедлайн</label>
+    <input type="date" id="modalDeadline">
+
+    <div class="modal-buttons">
+        <button class="btn-primary" id="modalSave">Сохранить</button>
+        <button class="btn-secondary" onclick="hideModal()">Отмена</button>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll(".nav-item[data-target]").forEach(el =>
+    el.addEventListener("click", () => location.href = el.dataset.target)
+);
+
+const modal = document.getElementById("taskModal");
+function showModal(){ modal.style.display = "block"; }
+function hideModal(){ modal.style.display = "none"; }
+
+document.getElementById("btnCreateTask").onclick = function(){
+    document.getElementById("modalTitle").innerText = "Создание задачи";
+    document.getElementById("modalTaskId").value = "";
+    showModal();
+};
+
+document.getElementById("modalSave").onclick = async function(){
+    const id = document.getElementById("modalTaskId").value;
+    const payload = {
+        name: modalName.value,
+        description: modalDesc.value,
+        client_id: modalClient.value,
+        status: modalStatus.value,
+        deadline: modalDeadline.value
+    };
+
+    await fetch("/api/v1/tasks", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    });
+
+    location.reload();
+};
+
+document.querySelectorAll(".task-card").forEach(card =>
+    card.addEventListener("click", function(){
+        const id = this.dataset.id;
+        loadTaskDetails(id);
+    })
+);
+
+async function loadTaskDetails(id){
+    const resp = await fetch("/api/v1/tasks");
+    const tasks = await resp.json();
+    const task = tasks.find(t => t.id == id);
+
+    document.getElementById("taskDetails").innerHTML = `
+        <div class="task-details">
+            <h2>${task.name}</h2>
+            <div class="details-grid">
+                <div><span class="details-label">Клиент:</span> ${task.client}</div>
+                <div><span class="details-label">Статус:</span> ${task.status}</div>
+                <div><span class="details-label">Дедлайн:</span> ${task.deadline || '-'}</div>
+            </div>
+
+            <h3>Учёт времени</h3>
+
+            <table class="time-table" id="timeTable">
+                <tr>
+                    <th>Дата</th>
+                    <th>Часы</th>
+                    <th>Комментарий</th>
+                    <th></th>
+                </tr>
+            </table>
+
+            <button class="add-row-btn" onclick="addRow()">Добавить строку</button>
+            <button class="save-time-btn" onclick="saveTime(${id})">Сохранить учёт времени</button>
+        </div>
+    `;
+
+    addRow();
+}
+
+function addRow(){
+    const table = document.getElementById("timeTable");
+    const row = table.insertRow();
+
+    row.innerHTML = `
+        <td><input type="date" value="${new Date().toISOString().slice(0,10)}"></td>
+        <td><input type="number" step="0.5" min="0"></td>
+        <td><textarea></textarea></td>
+        <td><button onclick="this.parentElement.parentElement.remove()">✖</button></td>
+    `;
+}
+
+async function saveTime(taskId){
+    const rows = [...document.querySelectorAll("#timeTable tr")].slice(1);
+
+    for (let r of rows){
+        const [date, hours, comment] = r.querySelectorAll("input, textarea");
+
+        await fetch("/api/v1/time", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                task_id: taskId,
+                date: date.value,
+                hours: hours.value,
+                comment: comment.value
+            })
+        });
+    }
+
+    alert("Учёт времени сохранён");
+}
+</script>
+
+</body>
+</html>

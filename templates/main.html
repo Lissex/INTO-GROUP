@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>INTOgroup</title>
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --accent-color: #7209b7;
+            --sidebar-bg: #2d3748;
+            --light-text: #cbd5e0;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .logo-container {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-img {
+            width: 40px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .nav-item span {
+            margin-left: 12px;
+        }
+
+        .user-profile {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            color: var(--light-text);
+            font-size: 12px;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+
+        .btn-logout:hover { color: #fff; }
+
+
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .wr-client, .wr-task, .new-task {
+            margin-bottom: 30px;
+        }
+
+        .client {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .circle__number { color: #fff; font-size: 12px; }
+
+        .wr-sort {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sort, .filter { padding: 6px 10px; }
+
+        .task {
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .notification {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .sign img { width: 24px; }
+
+
+        .modal-task {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .basic, .status {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .create__btn, .new-task__btn {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script src="./flang.tw1.ru_files/all.min.js"></script>
+</head>
+<body>
+
+    <header class="sidebar">
+        <div class="logo-container">
+            <img src="https://flang.tw1.ru/static/img/logo-header.svg" alt="Лого" class="logo-img">
+            <span class="logo-text">INTOgroup</span>
+        </div>
+
+        <nav class="nav-menu">
+            <div class="nav-item"><i class="fas fa-house"></i><span>Рабочий стол</span></div>
+            <div class="nav-item"><i class="fas fa-users"></i><span>Клиенты</span></div>
+            <div class="nav-item"><i class="fas fa-list-check"></i><span>Задачи</span></div>
+            <div class="nav-item"><i class="fas fa-chart-pie"></i><span>Виджеты</span></div>
+            <div class="nav-item"><i class="fas fa-comment-dots"></i><span>Чат</span></div>
+            <div class="nav-item"><i class="fas fa-robot"></i><span>Мои боты</span></div>
+        </nav>
+
+        <div class="user-profile">
+        <div class="user-avatar">{{ user.name[0].upper() }}</div>
+        <div>
+            <div class="user-name">{{ user.name }}</div>
+            <a href="/logout" class="btn-logout">Выход</a>
+        </div>
+    </div>
+    </header>
+
+<div class="modal-task" id="taskModal">
+    <div class="close" onclick="hideModal()">X</div>
+
+    <h3>Создать задачу</h3>
+    <select id="clientSelect">
+    {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+    {% endfor %}
+</select>
+
+
+    <input id="taskName" type="text" placeholder="Название" style="width:100%;margin-top:10px">
+    <textarea id="taskDesc" rows="4" style="width:100%;margin-top:10px"></textarea>
+
+    <select id="taskStatus" style="width:100%;margin-top:10px">
+        <option>На обсуждении</option>
+        <option>В работе</option>
+        <option>Готов</option>
+    </select>
+
+    <input id="taskDeadline" type="date" style="width:100%;margin-top:10px">
+    <input id="taskTime" type="time" style="width:100%;margin-top:10px">
+
+    <button style="margin-top:15px" onclick="createTask()">Создать</button>
+</div>
+
+
+    <script>
+        fetch('/api/v1/user')
+            .then(r => r.json())
+            .then(u => {
+                if (u.name) {
+                    userName.textContent = u.name;
+                    userAvatar.textContent = u.name[0].toUpperCase();
+                }
+            });
+
+        const getNav = label => [...document.querySelectorAll('.nav-item')]
+            .find(i => i.querySelector('span').innerText.trim() === label);
+
+        getNav('Чат')?.addEventListener('click', () => location.href = '/chat');
+        getNav('Мои боты')?.addEventListener('click', () => location.href = '/bots');
+        getNav('Задачи')?.addEventListener('click', () => location.href = '/tasks');
+        
+
+    function hideModal() {
+    document.getElementById('taskModal').style.display = 'none';
+}
+
+function createTask() {
+    fetch("/api/v1/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+    name: document.getElementById("taskName").value,
+    client_id: document.getElementById("clientSelect").value,
+    description: document.getElementById("taskDesc").value,
+    status: document.getElementById("taskStatus").value,
+    deadline: document.getElementById("taskDeadline").value,
+    planned_time: document.getElementById("taskTime").value
+})
+    }).then(r => {
+        if (r.status === 201) location.reload();
+    });
+}
+document.querySelector('.new-task__btn').addEventListener('click', () => {
+    document.getElementById('taskModal').style.display = 'block';
+});
+    </script>
+</body>
+</html>

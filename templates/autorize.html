@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INTOgroup - Вход / Регистрация</title>
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --accent-color: #7209b7;
+            --light-bg: #f5f6fa;
+            --dark-bg: #2d3748;
+            --light-text: #cbd5e0;
+            --input-bg: #fff;
+            --btn-hover: #5a73ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--light-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            display: flex;
+            width: 900px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .auth-brand {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: #fff;
+            width: 40%;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-brand h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .auth-brand p {
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .auth-forms {
+            width: 60%;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-forms h2 {
+            margin-bottom: 20px;
+            color: var(--dark-bg);
+        }
+
+        .auth-forms form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-forms input {
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .auth-forms input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(67,97,238,0.5);
+        }
+
+        .auth-forms button {
+            padding: 12px;
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-forms button:hover {
+            background: var(--btn-hover);
+        }
+
+        .auth-toggle {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .auth-toggle a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        @media(max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                width: 90%;
+            }
+            .auth-brand, .auth-forms {
+                width: 100%;
+            }
+            .auth-brand {
+                padding: 30px 20px;
+            }
+            .auth-forms {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-brand">
+            <img src="https://flang.tw1.ru/static/img/logo-header.svg" alt="Лого" class="logo-img">
+        </div>
+
+        <div class="auth-forms">
+            <!-- Форма входа -->
+            <div class="login-form">
+                <h2>Вход</h2>
+                <form action="/login" method="POST">
+    <input type="email" name="email" placeholder="Электронная почта" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <button type="submit">Войти</button>
+</form>
+                <div class="auth-toggle">
+                    Нет аккаунта? <a href="#" onclick="toggleForms()">Зарегистрироваться</a>
+                </div>
+            </div>
+            <div class="register-form" style="display: none;">
+                <h2>Регистрация</h2>
+                <form action="/register" method="POST">
+    <input type="text" name="name" placeholder="Имя" required>
+    <input type="email" name="email" placeholder="Электронная почта" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <input type="password" name="confirm" placeholder="Подтвердите пароль" required>
+    <button type="submit">Создать аккаунт</button>
+</form>
+                <div class="auth-toggle">
+                    Уже есть аккаунт? <a href="#" onclick="toggleForms()">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.querySelector('.login-form');
+        const registerForm = document.querySelector('.register-form');
+
+        function toggleForms() {
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
